@@ -1,4 +1,4 @@
-# ProjectC
+# GiveNote
 
 이 프로젝트는 [Next.js](https://nextjs.org)로 만들었고 [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app)으로 초기화했습니다.
 
@@ -30,7 +30,7 @@ bun dev
 
 이 저장소는 GitHub Actions로 정적 내보내기 후 GitHub Pages에 배포합니다.
 
-- 배포 URL: `https://dragon-it.github.io/projectC`
+- 배포 URL: `https://dragon-it.github.io/givenote`
 - 배포 트리거: `master` 브랜치에 푸시
 
 로컬에서 빌드만 확인하려면:

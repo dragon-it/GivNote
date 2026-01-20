@@ -68,7 +68,7 @@ const paymentMethods: PaymentMethodType[] = [
   "기타",
 ];
 
-const sideOptions: SideType[] = ["신부측", "신랑측"];
+const defaultSide: SideType = "신부측";
 
 const eventSchema = z.object({
   type: z.string().min(1, "행사 타입을 선택해 주세요."),
@@ -100,7 +100,6 @@ const formatMoney = (value: number) => value.toLocaleString("ko-KR");
 // @ts-nocheck
 export default function Home() {
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
-  const [activeSide, setActiveSide] = useState<SideType>("신부측");
   const [search, setSearch] = useState("");
   const [relationFilter, setRelationFilter] = useState("all");
   const [paymentFilter, setPaymentFilter] = useState("all");
@@ -162,9 +161,6 @@ export default function Home() {
     const normalizedSearch = search.trim().toLowerCase();
 
     return records.filter((record) => {
-      if (record.side && record.side !== activeSide) {
-        return false;
-      }
       if (relationFilter !== "all" && record.relation !== relationFilter) {
         return false;
       }
@@ -181,7 +177,7 @@ export default function Home() {
         .includes(normalizedSearch);
       return nameMatch || memoMatch;
     });
-  }, [records, activeSide, search, relationFilter, paymentFilter]);
+  }, [records, search, relationFilter, paymentFilter]);
 
   const totals = useMemo(() => {
     const totalAmount = filteredRecords.reduce(
@@ -590,7 +586,7 @@ export default function Home() {
 
     await db.records.add({
       eventId: selectedEventId,
-      side: activeSide,
+      side: defaultSide,
       name: parsed.data.name,
       amount: Number(parsed.data.amount),
       relation: (parsed.data.relation as RelationType) || undefined,
@@ -626,7 +622,6 @@ export default function Home() {
       return;
     }
     const rows = filteredRecords.map((record) => ({
-      구분: record.side,
       행사: selectedEvent.type,
       날짜: selectedEvent.date,
       장소: selectedEvent.location,
@@ -642,7 +637,7 @@ export default function Home() {
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "명단");
-    const filename = `축의금-${activeSide}-${selectedEvent.date}.xlsx`;
+    const filename = `givenote-${selectedEvent.date}.xlsx`;
     XLSX.writeFile(workbook, filename);
   };
 
@@ -651,7 +646,6 @@ export default function Home() {
       return;
     }
     const rows = filteredRecords.map((record) => ({
-      구분: record.side,
       행사: selectedEvent.type,
       날짜: selectedEvent.date,
       장소: selectedEvent.location,
@@ -667,7 +661,7 @@ export default function Home() {
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "명단");
-    const filename = `축의금-${activeSide}-${selectedEvent.date}.csv`;
+    const filename = `givenote-${selectedEvent.date}.csv`;
     XLSX.writeFile(workbook, filename, { bookType: "csv" });
   };
 
@@ -681,26 +675,6 @@ export default function Home() {
             </div>
             <span className="text-sm text-slate-600">하객 및 축의금 관리</span>
           </div>
-          <div className="flex flex-wrap gap-3">
-            {sideOptions.map((side) => {
-              const isActive = activeSide === side;
-              return (
-                <button
-                  key={side}
-                  type="button"
-                  onClick={() => setActiveSide(side)}
-                  className={`rounded-2xl border px-6 py-3 text-lg font-semibold transition ${
-                    isActive
-                      ? "border-slate-900 bg-slate-900 text-white shadow-lg shadow-slate-200"
-                      : "border-slate-200 bg-white text-slate-700 hover:border-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
-                >
-                  {side}
-                </button>
-              );
-            })}
-          </div>
-
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight">
