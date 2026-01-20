@@ -675,6 +675,14 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
         <header className="flex flex-col gap-6">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
+              givenote
+            </div>
+            <span className="text-sm text-slate-600">
+              하객 및 축의금 관리
+            </span>
+          </div>
           <div className="flex flex-wrap gap-3">
             {sideOptions.map((side) => {
               const isActive = activeSide === side;
@@ -689,7 +697,7 @@ export default function Home() {
                       : "border-slate-200 bg-white text-slate-700 hover:border-slate-600 hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >
-                  {side} 하객 및 축의금 리스트
+                  {side}
                 </button>
               );
             })}
@@ -698,7 +706,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight">
-                {activeSide} 하객 및 축의금 리스트
+                givenote
               </h1>
               <p className="text-sm text-slate-600">
                 행사별 명단을 관리하고 엑셀 또는 CSV로 내보내기.
@@ -965,7 +973,11 @@ export default function Home() {
                   <div className="text-xs text-red-500">{inlineError}</div>
                 ) : null}
               </div>
-              <div className="mt-3 grid gap-2 lg:grid-cols-[1.1fr_0.8fr_0.9fr_0.8fr_0.9fr_1.2fr_auto]">
+            <div className="mt-3 grid gap-2 lg:grid-cols-[1.1fr_0.8fr_0.9fr_0.8fr_0.9fr_1.2fr_auto]">
+              <div className="grid gap-1">
+                <span className="text-[11px] font-medium text-slate-600">
+                  이름
+                </span>
                 <Input
                   key="inline-name"
                   placeholder="이름"
@@ -979,6 +991,11 @@ export default function Home() {
                   }
                   onKeyDown={handleInlineKeyDown}
                 />
+              </div>
+              <div className="grid gap-1">
+                <span className="text-[11px] font-medium text-slate-600">
+                  금액
+                </span>
                 <Input
                   key="inline-amount"
                   type="number"
@@ -993,6 +1010,11 @@ export default function Home() {
                   }
                   onKeyDown={handleInlineKeyDown}
                 />
+              </div>
+              <div className="grid gap-1">
+                <span className="text-[11px] font-medium text-slate-600">
+                  관계
+                </span>
                 <Select
                   key="inline-relation"
                   value={inlineForm.relation || undefined}
@@ -1011,6 +1033,11 @@ export default function Home() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="grid gap-1">
+                <span className="text-[11px] font-medium text-slate-600">
+                  인원 수
+                </span>
                 <Input
                   key="inline-companions"
                   type="number"
@@ -1025,11 +1052,19 @@ export default function Home() {
                   }
                   onKeyDown={handleInlineKeyDown}
                 />
+              </div>
+              <div className="grid gap-1">
+                <span className="text-[11px] font-medium text-slate-600">
+                  전달방식
+                </span>
                 <Select
                   key="inline-payment-method"
                   value={inlineForm.paymentMethod || undefined}
                   onValueChange={(value) =>
-                    setInlineForm((prev) => ({ ...prev, paymentMethod: value }))
+                    setInlineForm((prev) => ({
+                      ...prev,
+                      paymentMethod: value,
+                    }))
                   }
                 >
                   <SelectTrigger>
@@ -1043,6 +1078,11 @@ export default function Home() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="grid gap-1">
+                <span className="text-[11px] font-medium text-slate-600">
+                  메모
+                </span>
                 <Input
                   key="inline-memo"
                   placeholder="메모"
@@ -1055,6 +1095,8 @@ export default function Home() {
                   }
                   onKeyDown={handleInlineKeyDown}
                 />
+              </div>
+              <div className="grid items-end">
                 <Button
                   type="button"
                   onClick={handleInlineAdd}
@@ -1063,6 +1105,7 @@ export default function Home() {
                   추가
                 </Button>
               </div>
+            </div>
             </div>
           </div>
 
