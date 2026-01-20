@@ -621,7 +621,21 @@ export default function Home() {
     if (!selectedEvent) {
       return;
     }
-    const rows = filteredRecords.map((record) => ({
+    const emptyRow = {
+      번호: "",
+      행사: "",
+      날짜: "",
+      장소: "",
+      호스트: "",
+      이름: "",
+      금액: "",
+      관계: "",
+      인원수: "",
+      전달방식: "",
+      메모: "",
+    };
+    const rows = filteredRecords.map((record, index) => ({
+      번호: index + 1,
       행사: selectedEvent.type,
       날짜: selectedEvent.date,
       장소: selectedEvent.location,
@@ -633,8 +647,28 @@ export default function Home() {
       전달방식: record.paymentMethod ?? "",
       메모: record.memo ?? "",
     }));
+    const summaryRows = [
+      emptyRow,
+      { ...emptyRow, 번호: "총 금액", 금액: totals.totalAmount },
+      { ...emptyRow, 번호: "총 인원수", 인원수: totals.totalPeople },
+      { ...emptyRow, 번호: "총 건수", 메모: `${totals.totalCount}건` },
+    ];
+    const rowsWithSummary = rows.concat(summaryRows);
 
-    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const worksheet = XLSX.utils.json_to_sheet(rowsWithSummary);
+    worksheet["!cols"] = [
+      { wch: 6 },
+      { wch: 10 },
+      { wch: 12 },
+      { wch: 14 },
+      { wch: 12 },
+      { wch: 12 },
+      { wch: 12 },
+      { wch: 10 },
+      { wch: 8 },
+      { wch: 12 },
+      { wch: 16 },
+    ];
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "명단");
     const filename = `givenote-${selectedEvent.date}.xlsx`;
@@ -645,7 +679,21 @@ export default function Home() {
     if (!selectedEvent) {
       return;
     }
-    const rows = filteredRecords.map((record) => ({
+    const emptyRow = {
+      번호: "",
+      행사: "",
+      날짜: "",
+      장소: "",
+      호스트: "",
+      이름: "",
+      금액: "",
+      관계: "",
+      인원수: "",
+      전달방식: "",
+      메모: "",
+    };
+    const rows = filteredRecords.map((record, index) => ({
+      번호: index + 1,
       행사: selectedEvent.type,
       날짜: selectedEvent.date,
       장소: selectedEvent.location,
@@ -657,8 +705,15 @@ export default function Home() {
       전달방식: record.paymentMethod ?? "",
       메모: record.memo ?? "",
     }));
+    const summaryRows = [
+      emptyRow,
+      { ...emptyRow, 번호: "총 금액", 금액: totals.totalAmount },
+      { ...emptyRow, 번호: "총 인원수", 인원수: totals.totalPeople },
+      { ...emptyRow, 번호: "총 건수", 메모: `${totals.totalCount}건` },
+    ];
+    const rowsWithSummary = rows.concat(summaryRows);
 
-    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const worksheet = XLSX.utils.json_to_sheet(rowsWithSummary);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "명단");
     const filename = `givenote-${selectedEvent.date}.csv`;
